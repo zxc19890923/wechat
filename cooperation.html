@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html ng-app="cooperation">
+<head>
+    <title>帮瀛服务号</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="lib/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.css">
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/demos.css">
+    <style>
+
+    </style>
+</head>
+
+<body ontouchstart ng-controller="cooperationCtrl" style="background: #fff;">
+<div class="weui_tab">
+    <div class="weui_tab_bd">
+        <div class="weui_tab_bd_item  weui_tab_bd_item_active refresh">
+            <div class="normalShow">
+                <p style="height: 35px"></p>
+                <div class="weui-pull-to-refresh-layer" style="display: none; margin-bottom: 10px">
+                    <div class="pull-to-refresh-arrow"></div> <!-- 上下拉动的时候显示的箭头 -->
+                    <div class="pull-to-refresh-preloader"></div> <!-- 正在刷新的菊花 -->
+                    <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+                    <div class="up">释放刷新</div><!-- 下拉超过50px显示的文案 -->
+                    <div class="refresh">正在刷新...</div><!-- 正在刷新时显示的文案 -->
+                </div>
+                <div class="cooperationTop" style="background: #d2e1e6; padding: 10px 0">
+                    <p style="margin-top: 10px">推荐案源预计获得</p>
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-1" style="border-right: 1px solid #333">
+                            签约后
+                            <p class="before" style="color: #d88120; font-size: 26px"></p>
+                        </div>
+                        <div class="col-xs-5">
+                            执行后
+                            <p class="after" style="color: #d88120; font-size: 26px;"></p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1">
+                            <span style="position: absolute; color: #333; left: 30px; top: 7px; font-size:10px">案件标的额</span>
+                            <input type="number" ng-model="total" placeholder="输入案件争议标的额"
+                                   style="text-align: center; width: 100%; background: #fff; color: #999; border: none; height: 25px; line-height: 25px;"
+                                   class="total"/>
+                            <span style="position: absolute; right: 30px; color: #333; top: 7px; font-size: 10px">万</span>
+                        </div>
+                    </div>
+                    <p style="font-size: 10px; margin: 10px 0 0 0">*实际奖励以帮瀛相关规定为准</p>
+                </div>
+                <form name="form" style="border-bottom: 1px dotted #333; padding: 10px 0; background: #ececec">
+                    <div ng-show="checkPhone">
+                        <div class="row">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <p>
+                                    <input type="text" name="phone" class="form-control" placeholder="请输入您的手机号码"
+                                           style="background: #fff; -webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;"
+                                           ng-model="user.phone" required/>
+                                </p>
+                            </div>
+                            <div class="col-xs-6 col-xs-offset-1">
+                                <p>
+                                    <input type="text" placeholder="请输入您获取的验证码" class="form-control"
+                                           style="background: #fff; -webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;"
+                                           ng-model="user.verCode"/>
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <p>
+                                    <a class="btn btn-primary btn-block"
+                                       ng-click="sentMessage()" ng-disabled="paraevent">{{paracont}}</a>
+                                </p>
+                            </div>
+                        </div>
+                        <p>
+                            <input type="checkbox" checked ng-model="user.checkText"/>
+                            <span style="font-size: 10px; text-decoration: underline" class="showAgreement">
+                                    我同意《帮瀛事业合伙人协议书》
+                                </span>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-10 col-xs-offset-1">
+                            <a ng-click="subCase()" class="btn btn-primary btn-block">提交</a>
+                        </div>
+                    </div>
+                </form>
+                <div class="cooperationBottom" style="background: #fff; padding: 10px 0">
+                    <p style="margin-top: 15px;"><span><b>帮瀛承接项目标准</b></span></p>
+                    <p style="text-align: left; width: 175px; margin: 0 auto;"><input type="checkbox"
+                                                                                      style="background: #1689bb"
+                                                                                      class="ckbox" checked="true"/>
+                        民商事类诉讼案件为主 </p>
+                    <p style="text-align: left; width: 175px; margin: 0 auto;"><input type="checkbox"
+                                                                                      style="background: #1689bb"
+                                                                                      class="ckbox" checked="true"/>
+                        单个案件标的额≥500万 </p>
+                    <p style="text-align: left; width: 175px; margin: 0 auto;"><input type="checkbox"
+                                                                                      style="background: #1689bb"
+                                                                                      class="ckbox" checked="true"/>
+                        证据及案件线索相对清晰</p>
+                </div>
+            </div>
+        </div>
+        <div class="weui_panel weui_panel_access agreement" style="background: #ececec;">
+            <div class="weui_panel_bd">
+                <div class="weui-row">
+                    <div class="weui-col-10"></div>
+                    <div class="weui-col-80" style="text-align: left;">
+                        <a class="pull-right closeAgreement" style="color: #999; font-size: 20px; cursor: pointer">
+                            &times;
+                        </a>
+                        <p>帮瀛法务机构</p>
+                        <p>事业合伙人合作协议</p>
+                        <p> 1、关于帮瀛法务机构及协议</p>
+                        <p>1.1
+                            帮瀛网络科技（北京）股份有限公司（下称“帮瀛法务机构”）系国内首家集法务投融资、法务经纪与法务咨询于一体的综合型法务平台，主要接受客户委托，从事诉讼项目的投资、咨询和管理服务。</p>
+                        <p>1.2 符合帮瀛法务机构投资、咨询和管理的诉讼项目线索，称为“案源”。</p>
+                        <p>1.3
+                            帮瀛法务机构事业合伙人合作协议（下称“本协议”）是用户与帮瀛法务机构之间的合作协议。如用户同意接受本协议的全部条款，则需要向帮瀛法务机构提供准确、详细的个人资料，如个人资料有变动，则需要及时更新。如因资料提供不准确或更新不及时，导致无法获得帮瀛法务机构提供的服务及支付费用时，帮瀛法务机构将不承担责任。</p>
+                        <p>1.4
+                            因技术本身的局限性，帮瀛法务机构不能保证网站链接与其他电脑、手机等客户端的软硬件、系统完全兼容，如出现不兼容的情况，用户可将情况通知帮瀛法务机构，以获得技术支持；如无法解决问题，帮瀛法务机构将不承担责任。</p>
+                        <p>1.5 如因第三方机构基于法律、法规或政策的要求需要提前终止本协议，则帮瀛法务机构有权提前终止本协议，且不需要向用户承担责任。</p>
+                        <p>2、事业合伙人要求</p>
+                        <p>2.1有提供符合帮瀛法务机构收案条件的案源或有分享指定链接给案源持有人的分享行为；</p>
+                        <p> 2.2 认可帮瀛法务机构经营模式、理念和合作方式，并致力于和帮瀛法务机构共同推动国家法治建设；</p>
+                        <p>
+                            2.3 有责任心和团队意识，能够成为客户与帮瀛法务机构沟通的桥梁，协助双方达成服务协议。
+                        </p>
+                        <p> 3、收案条件
+                        </p>
+                        <p> 3.1 客户对诉讼项目有遴选律师，管理律师及诉讼成本融资的需求。
+                        </p>
+                        <p> 3.2 民商事案件，主要包括不良资产处置、债权实现、企业（个人）应收账款清收，财产保险合同、买卖合同、建设工程合同、土地转让合同、公司股权纠纷等；
+                        </p>
+                        <p> 3.3 单个案件争议标的额超过500万元人民币。
+                        </p>
+                        <p> 3.4 拟起诉或正在诉讼过程中的案件，包含一审、二审、再审、执行期间内案件。
+                        </p>
+                        <p> 3.5 证据及财产线索比较清晰，证据材料可以及时提交。
+                        </p>
+                        <p> 3.6 客户诚实守信，有全权委托意向，提供的证据材料客观、真实、全面。
+                        </p>
+                        <p> 4、合作模式及合作级别
+                        </p>
+                        <p> 4.1
+                            事业合伙人需积极配合帮瀛法务机构就案源展开沟通、对接、培育、谈判、签约等开发工作。当双方就案源项目建立合作关系时，帮瀛法务机构以合作奖励的形式向事业合伙人支付相关费用以示补贴。
+                        </p>
+                        <p> 4.2
+                            事业合伙人有两种类型，一种为“案源型”事业合伙人，指向帮瀛法务机构直接提供案源的人员；一种为“分享型”事业合伙人，指未直接提供案源，只是分享帮瀛法务机构指定链接给社会广大人士的人员。
+                        </p>
+                        <p> 4.3
+                            事业合伙人分为A、B、C、D级四个级别，其中，A—C级为“分享型”事业合伙人，D级为“案源型”事业合伙人。A、B、C根据与D之间分享链接来源的远近关系，获得相应的合作奖励费用，四级事业合伙人关系图如下：</p>
+                        <p class="text-center thumbnail" style="border: none; padding: 0">
+                            <img src="images/agreement.png"/>
+                        </p>
+                        <p>5、合作奖励
+                        </p>
+                        <p>5.1 合作奖励结合“签约合同金额”及“级别”进行计算。“签约合同金额”以帮瀛法务机构审核数额为准，“级别”以与实际提供案源人员的链接来源远近程度为准。
+                        </p>
+                        <p>
+                            5.2合作奖励分为前期奖励和后期奖励。前期奖励在帮瀛法务机构与客户签约后40日内予以支付（如签约后双方因各种原因于30日内解约，该笔费用不予支付）；后期奖励在帮瀛法务机构实际收取服务费后30日内予以支付。
+                        </p>
+                        <p>5.3 合作费用具体计算方式如下表所示：</p>
+                        <table width="100%" class="table-bordered" style="font-size: 10px; background: #eaeff7">
+                            <tr>
+                                <td>
+                                    签约合同金额（单笔）
+                                </td>
+                                <td>
+                                    A级（前期）推荐奖+（后期）推荐奖
+                                </td>
+                                <td>
+                                    B级（前期）推荐奖+（后期）推荐奖
+                                </td>
+                                <td>
+                                    C级（前期）推荐奖+（后期）推荐奖
+                                </td>
+                                <td>
+                                    D级（前期）签约奖+（后期）签约奖
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>500万≤X≤1000万</td>
+                                <td>120元+0.3%*帮瀛收益</td>
+                                <td>280元+0.7%*帮瀛收益</td>
+                                <td>400元+1%*帮瀛收益</td>
+                                <td>1888元+（12%*帮瀛收益-1888元）</td>
+                            </tr>
+                            <tr>
+                                <td>1000万＜X≤5000万</td>
+                                <td>240元+0.3%*帮瀛收益</td>
+                                <td>560元+0.7%*帮瀛收益</td>
+                                <td>800元+1%*帮瀛收益</td>
+                                <td>3888元+（12%*帮瀛收益-3888元）</td>
+                            </tr>
+                            <tr>
+                                <td>5000万＜X≤1亿</td>
+                                <td>360元+0.3%*帮瀛收益</td>
+                                <td>840元+0.7%*帮瀛收益</td>
+                                <td>1200元+1%帮瀛收益</td>
+                                <td>6888元+（12%*帮瀛收益-6888元）</td>
+                            </tr>
+                            <tr>
+                                <td>1亿＜X≤2亿</td>
+                                <td>500元+0.3%*帮瀛收益</td>
+                                <td>1100元+0.7%帮瀛收益</td>
+                                <td>1600元+1%帮瀛收益</td>
+                                <td>8888元+（12%*帮瀛收益-8888元）</td>
+                            </tr>
+                            <tr>
+                                <td>2亿＜X≤5亿</td>
+                                <td>700元+0.3%*帮瀛收益</td>
+                                <td>1600元+0.7%*帮瀛收益</td>
+                                <td>2300元+1%帮瀛收益</td>
+                                <td>16666元+（13%*帮瀛收益-16666元）</td>
+                            </tr>
+                            <tr>
+                                <td>5亿＜X≤10亿</td>
+                                <td>1000元+0.3%*帮瀛收益</td>
+                                <td>2500元+0.7%*帮瀛收益</td>
+                                <td>3500元+1%帮瀛收益</td>
+                                <td>26666元+（14%*帮瀛收益-26666元）</td>
+                            </tr>
+                            <tr>
+                                <td>X>10亿</td>
+                                <td>1500元+0.3%*帮瀛收益</td>
+                                <td>3700元+0.7%*帮瀛收益</td>
+                                <td>5300元+1%帮瀛收益</td>
+                                <td>36666元+（15%*帮瀛收益-36666元）</td>
+                            </tr>
+                        </table>
+                        <p>
+                            说明：事业合伙人分为A、B、C、D四级，如您为“案源型”事业合伙人（即D级），可以获得如上图所示合作费用；如您为“分享型”事业合伙人（即A、B、C级），则通过您与D之间分享链接来源的远近关系，可获得120元-5300元不等的前期固定奖励及后期帮瀛收益的1%、0.7%、0.3%作为奖励，与D链接来源关系越近，奖励费用越高，反之越低。通过您的转发，共计最多3级朋友都可获得相应奖励。
+                        </p>
+                        <p>6、合作期间
+                        </p>
+                        <p>
+                            本协议有效期间至2016年12月31日，2016年12月31日之前签约项目未执行完毕的，直至案件执行完结后本协议终止；2016年12月31日之后签约案件，不再执行本协议，如帮瀛法务机构有后续政策，届时另行通知相关事业合伙人。
+                        </p>
+                        <p>7、协议修改与解释权
+                        </p>
+                        <p>
+                            本协议的最终修改权归帮瀛法务机构。本协议条款一旦发生变动，帮瀛法务机构将会在相关页面上提示变更内容，而不另行向用户进行个别通知。修改后的合作协议一旦在页面上公布即有效代替原来的合作协议。用户可定期查阅最新合作协议。如用户不同意帮瀛法务机构对本协议所作的任何变更，用户应立即停止与帮瀛法务机构的合作。如果用户在本协议变更后仍选择与帮瀛法务机构合作，即视为用户已完全同意变更后的合作协议。
+                        </p>
+                        <p><span style="text-decoration: underline">本协议的最终解释权归帮瀛法务机构。</span></p>
+                        <p class="text-right">发布日期：2016年8月2日</p>
+
+                    </div>
+                    <div class="weui-col-10"></div>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui_tabbar">
+    <a href="home.html" class="weui_tabbar_item">
+        <div class="weui_tabbar_label">
+            <div class="weui_tabbar_icon">
+                <i class="fa fa-home"></i>
+            </div>
+            <p>首页</p>
+        </div>
+    </a>
+    <a href="cooperation.html" class="weui_tabbar_item  weui_bar_item_on">
+        <div class="weui_tabbar_label">
+            <div class="weui_tabbar_icon">
+                <!--<i class="fa fa-users" aria-hidden="true"></i>-->
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 278.215 278.215" xml:space="preserve">
+                        <g>
+	<path d="M102.128,70.841c-13.88-0.048-25.157-11.356-25.157-25.247c0-7.115,2.962-13.548,7.713-18.142l-5.843-5.494
+		c-1.057-0.909-2.361-1.358-3.662-1.358c-1.444,0-2.885,0.554-3.978,1.649L1.64,91.92c-1.989,1.994-2.194,5.153-0.479,7.388
+		l25.59,29.224c0.515,0.671,0.863,1.446,1.043,2.273c1.043,4.785,2.827,9.867,5.199,15.145l2.401-2.401
+		c4.196-4.199,9.777-6.512,15.714-6.512c5.934,0,11.515,2.312,15.712,6.509c0.026,0.026,0.053,0.053,0.078,0.079l0.072,0.073
+		c2.891,2.905,4.854,6.477,5.804,10.36c3.317-1.898,7.077-2.929,11.002-2.929c5.925,0,11.495,2.304,15.689,6.487l0.094,0.093
+		c0.012,0.012,0.024,0.024,0.036,0.036c4.196,4.196,6.507,9.776,6.507,15.711c0,2.755-0.519,5.425-1.472,7.924
+		c4.794,0.643,9.23,2.802,12.713,6.282l0.109,0.109c3.085,3.086,5.05,6.865,5.938,10.839l50.441,50.441
+		c2.7,2.701,6.316,4.129,9.921,4.129c2.866,0,5.725-0.903,8.106-2.789c6.361-5.035,6.756-14.404,1.184-19.977l-48.811-48.811
+		c-2.517-2.516-2.517-6.595,0-9.11c1.276-1.276,2.949-1.915,4.622-1.915c1.674,0,3.347,0.639,4.623,1.915l62.081,62.081
+		c2.701,2.7,6.317,4.129,9.921,4.129c2.867,0,5.725-0.904,8.107-2.789c6.361-5.035,6.755-14.404,1.183-19.977l-62.373-62.374
+		c-2.551-2.55-2.551-6.685,0-9.234l0,0c1.26-1.26,2.91-1.89,4.561-1.89c1.65,0,3.301,0.63,4.561,1.89l48.518,48.518
+		c2.701,2.701,6.318,4.129,9.922,4.129c2.866,0,5.725-0.903,8.106-2.789c6.361-5.035,6.756-14.404,1.183-19.977L146.441,71.404
+		L102.128,70.841z"/>
+	<path d="M136.744,262.609c3.916,0,7.831-1.695,10.515-5.086c4.256-5.377,3.51-13.18-1.339-18.028l-4.28-4.279
+		c-0.372,5.139-2.498,10.174-6.418,14.095l-5.567,5.565c-1.053,1.054-2.194,1.987-3.405,2.797l1.033,1.034
+		C129.885,261.308,133.314,262.609,136.744,262.609z"/>
+	<path d="M207.014,17.256c-1.093-1.096-2.533-1.65-3.978-1.65c-1.301,0-2.605,0.45-3.662,1.359l-4.645,2.649
+		c-0.008,0.007-0.017,0.011-0.026,0.013l-92.483,12.719c-7.286,0-13.248,5.962-13.248,13.248c0,7.286,5.962,13.247,13.248,13.247
+		l49.323,0.626c0,0,76.438,76.475,93.428,93.465c13.355-17.017,25.269-34.811,28.649-50.321c0.181-0.826,0.528-1.602,1.043-2.272
+		l2.391-6.024c1.716-2.234,1.511-5.393-0.478-7.389L207.014,17.256z"/>
+	<path d="M35.998,174.582c1.996,1.995,4.61,2.993,7.226,2.993c2.615,0,5.23-0.998,7.226-2.993l7.992-7.993
+		c3.992-3.99,3.992-10.461,0-14.451l-0.106-0.107c-1.996-1.996-4.611-2.994-7.226-2.994c-2.615,0-5.231,0.998-7.226,2.994
+		l-7.994,7.994c-3.989,3.989-3.989,10.46,0,14.45L35.998,174.582z"/>
+	<path d="M64.97,202.588c2.615,0,5.23-0.998,7.227-2.994l18.914-18.913c3.99-3.989,3.99-10.46,0-14.451l-0.107-0.106
+		c-1.995-1.996-4.61-2.994-7.226-2.994c-2.616,0-5.231,0.998-7.229,2.994l-18.912,18.912c-3.991,3.991-3.991,10.46,0,14.451
+		l0.106,0.107C59.739,201.59,62.354,202.588,64.97,202.588z"/>
+	<path d="M82.275,222.95c1.995,1.995,4.611,2.992,7.226,2.992c2.615,0,5.231-0.997,7.225-2.992l12.241-12.241
+		c3.989-3.99,3.989-10.462,0-14.452l-0.108-0.108c-1.996-1.995-4.611-2.992-7.227-2.992c-2.614,0-5.229,0.997-7.226,2.992
+		l-12.239,12.241c-3.991,3.991-3.991,10.462,0,14.452L82.275,222.95z"/>
+	<path d="M121.168,246.391l5.568-5.567c3.989-3.99,3.989-10.46,0-14.451l-0.106-0.108c-1.995-1.995-4.61-2.993-7.227-2.993
+		c-2.615,0-5.23,0.998-7.227,2.993l-5.567,5.567c-3.992,3.99-3.992,10.462,0,14.453l0.108,0.106c1.995,1.995,4.61,2.993,7.225,2.993
+		C116.557,249.384,119.173,248.386,121.168,246.391z"/>
+</g>
+                        </svg>
+            </div>
+            <p>合作</p>
+        </div>
+    </a>
+    <a href="my.html" class="weui_tabbar_item">
+        <div class="weui_tabbar_label">
+            <div class="weui_tabbar_icon">
+                <i class="fa fa-user"></i>
+            </div>
+            <p>我的</p>
+        </div>
+    </a>
+</div>
+</div>
+<script src="lib/jquery-2.1.4.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/function.js"></script>
+<script src="js/angular-1.4.8.js"></script>
+<script src="common/common.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<!--<script src="js/wx_share.js"></script>-->
+<script src="common/common.js"></script>
+<script src="js/wx.js"></script>
+<script>
+    $(function () {
+        wxLogin();
+//        配置分享
+        $.showLoading('加载中');
+        wxShareConfig(function () {
+            $.hideLoading();
+        });
+
+        $(".normalShow").pullToRefresh();
+        $(".normalShow").on("pull-to-refresh", function () {
+            $(".weui-pull-to-refresh-layer").show();
+            window.location.reload();
+        });
+        $(".normalShow").pullToRefreshDone();
+
+        $(".ckbox").click(function () {
+            if ($(this).prop("checked") == false) {
+                $(this).prop("checked", true);
+            }
+        })
+    });
+    $(".showAgreement").click(function () {
+        $(".agreement").show();
+        $(".normalShow").hide();
+    });
+    $(".closeAgreement").click(function () {
+        $(".agreement").hide();
+        $(".normalShow").show();
+    });
+    // 计算钱数
+
+    var cooperation = angular.module("cooperation", []);
+    cooperation.controller("cooperationCtrl", function ($scope, $http, $interval) {
+        $scope.phone = localStorage.getItem("phone");
+        $scope.user = {};
+        $scope.user.phone = "";
+        $scope.user.verCode = "";
+        $scope.user.checkText = true;
+
+        $scope.paracont = "获取验证码";
+        $scope.paraevent = false;
+        var second = 30;
+        var timePromise = undefined;
+        var phone = localStorage.getItem("phone");
+//        alert(phone);
+        $scope.checkPhone = false;
+        if (phone == "" || phone == undefined || phone == null) {
+            $scope.checkPhone = true;
+            $scope.sentMessage = function () {
+                if ($scope.user.phone == "" || $scope.user.phone == undefined) {
+                    $.toptip('请先填写手机号码', 'error');
+                    return false;
+                }
+                else {
+                    $scope.paraevent = true;
+                    timePromise = $interval(function () {
+                        if (second <= 0) {
+                            $interval.cancel(timePromise);
+                            timePromise = undefined;
+
+                            second = 30;
+                            $scope.paracont = "重发验证码";
+                            $scope.paraevent = false;
+                        }
+                        else {
+                            $scope.paracont = second + "秒后重发";
+                            second--;
+
+                        }
+                    }, 1000, 100);
+
+                    // 发送短信的接口
+                    var data = {
+                        phone: $scope.user.phone,
+                    };
+                    console.log(data);
+                    $http.post(ServerURL + "user/send_message_code", data).success(function (data) {
+                        console.log(data);
+                    })
+                }
+            }
+        }
+        else {
+            $scope.checkPhone = false;
+            $scope.user.phone = "";
+            $scope.user.verCode = "";
+        }
+        $scope.subCase = function () {
+            if ($scope.total < 500) {
+                $.toptip("案件争议标的额必须大于500万", 'error');
+            }
+            else {
+                if (localStorage.getItem("type") == 1) {
+                    $.toptip("请到线下提交案子", "error");
+                    return false;
+                }
+                else {
+                    if ($scope.user.checkText == false) {
+                        $.toptip("请先同意帮瀛事业合伙人协议书", 'error');
+                    }
+                    else {
+
+                        if (phone == "" || phone == undefined || phone == null) {
+                            if ($scope.user.phone == "" || $scope.user.phone == undefined) {
+                                $.toptip("请先验证手机", 'error');
+                            }
+                            else {
+                                var data = {
+                                    link_id: localStorage.getItem("link_id"),
+                                    user_id: localStorage.getItem("user_id"),
+                                    phone: $scope.user.phone,
+                                    code: $scope.user.verCode,
+                                    money: $scope.total,
+                                    token: localStorage.getItem('token')
+                                };
+//                    alert(JSON.stringify(data));
+                                $http.post(ServerURL + "user/offer_case", data).success(function (data) {
+//                        alert(JSON.stringify(data));
+                                    if (data.status == true) {
+                                        // 反馈刚新建的项目id
+                                        sessionStorage.setItem("project_id", data.data.project_id);
+                                        sessionStorage.setItem("num", data.data.num);
+                                        $.showLoading("跳转中...");
+                                        window.location.href = "jump.html";
+                                    }
+                                    else {
+                                        $.toptip(data.message, 'error');
+                                    }
+                                });
+                                localStorage.setItem("phone", $scope.user.phone);
+                            }
+                        }
+                        else {
+                            data = {
+                                link_id: localStorage.getItem("link_id"),
+                                user_id: localStorage.getItem("user_id"),
+                                money: $scope.total,
+                                token: localStorage.getItem('token')
+                            };
+//                        alert(JSON.stringify(data));
+                            $http.post(ServerURL + "user/offer_case", data).success(function (data) {
+//                            alert(JSON.stringify(data));
+                                if (data.status == true) {
+                                    // 反馈刚新建的项目id
+                                    sessionStorage.setItem("project_id", data.data.project_id);
+                                    sessionStorage.setItem("num", data.data.num);
+                                    $.showLoading("跳转中...");
+                                    window.location.href = "jump.html";
+                                }
+                                else {
+                                    $.toptip(data.message, 'error');
+                                }
+                            }).error(function (err) {
+                                alert(JSON.stringify(err));
+                            });
+                        }
+                    }
+                }
+            }
+            console.log(data);
+        };
+        $scope.$watch("total", function () {
+            var after = 0;
+            var before = 0;
+            var total = parseInt($scope.total);
+            if (total >= 500) {
+                if (total <= 1000 && total >= 500) {
+                    before = 1888 + "元";
+                    after = 0.12 * 0.20 * total * 10000 - 1888;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total <= 5000 && total > 1000) {
+                    before = 3888 + "元";
+                    after = 0.12 * 0.20 * total * 10000 - 3888;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total <= 10000 && total > 5000) {
+                    before = 6888 + "元";
+                    after = 0.12 * 0.20 * total * 10000 - 6888;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total <= 20000 && total > 10000) {
+                    before = 8888 + "元";
+                    after = 0.12 * 0.20 * total * 10000 - 8888;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total <= 50000 && total > 20000) {
+                    before = 1.67 + "万";
+                    after = 0.13 * 0.20 * total * 10000 - 16666;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total <= 100000 && total > 50000) {
+                    before = 2.67 + "万";
+                    after = 0.14 * 0.20 * total * 10000 - 26666;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                if (total > 100000) {
+                    before = 3.67 + "万";
+                    after = 0.15 * 0.20 * total * 10000 - 36666;
+                    if (after > 10000) {
+                        after = Math.round(after / 10000) + "万"
+                    }
+                }
+                $(".before").text(before);
+                $(".after").text(after);
+            }
+            else {
+                $(".before").text("0.00元");
+                $(".after").text("0.00元");
+            }
+        });
+    });
+</script>
+</body>
+</html>

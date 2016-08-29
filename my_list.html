@@ -1,0 +1,15 @@
+<div class="weui_cells weui_cells_access myList">
+    <a class="weui_cell" href="my.html#/partner/{{info.user_id}}" ng-repeat="info in data">
+        <div class="weui_cell_hd">
+            <img ng-src="{{info.wx_headimgurl}}" alt="icon"
+                 style="width:40px; border-radius: 100%; margin-right:5px;display:block">
+        </div>
+        <div class="weui_cell_bd weui_cell_primary text-left">
+            <label>{{info.wx_nickname}}</label>
+        </div>
+        <div class="weui_cell_ft">
+            案件数量{{info.case_count}}件
+        </div>
+    </a>
+    <a class="weui_cell" ng-show = "data.length ==0">暂无推荐事业合伙人</a>
+</div>

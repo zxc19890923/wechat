@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-offset-1">
+            <br/>
+            <p class="text-left">案件编号：{{project.num}}</p>
+            <p class="text-left">提交人: <span class="text-warning">{{project.name}}</span></p>
+            <p class="text-left">标的额：<span class="text-danger">{{project.money}}</span></p>
+            <p class="text-left">
+                预计收益
+            </p>
+            <p class="text-left">前期：<span class="text-danger">{{project.first_profit}}</span></p>
+            <p class="text-left">后期：<span class="text-danger">{{project.last_profit}}</span></p>
+            <br/>
+            <table width="100%" class="text-left">
+                <!--进度循环这个tr-->
+                <tr ng-repeat="info in project_operate">
+                    <td width="40%"><span class="text-primary text-left">{{info.create_time}}</span></td>
+                    <td style="width: 40px; text-align: center; background: url(images/bgline.png) repeat-y 18px 0; padding: 5px 0">
+                        <img src="images/circular.png" style="width: 11px"/></td>
+                    <td>
+                        <span class="text-primary text-left">{{info.type}}</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row" ng-show="applyBtn">
+        <div class="col-xs-4 col-xs-offset-4">
+            <a href="my.html#/money/{{project.id}}" class="btn btn-primary btn-block">申请提钱</a>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+</div>

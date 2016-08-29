@@ -1,0 +1,25 @@
+<div class="weui_tab">
+    <div class="weui_navbar">
+        <a href="my.html#/my_case" class="weui_navbar_item  weui_bar_item_on">
+            我的案件
+        </a>
+        <a href="my.html#/other_case" class="weui_navbar_item">
+            推荐人案件
+        </a>
+    </div>
+    <div class="weui_tab_bd">
+        <div class="weui_cells weui_cells_access">
+            <a href="my.html#/speed/{{info.project_id}}" class="weui_cell" ng-repeat="info in data" ng-click="isPartner()">
+                <div class="weui_cell_bd weui_cell_primary text-left">
+                    <p style="margin: 0;">案件编号：{{info.num}}</p>
+                    <p style="margin: 0">标的额：<span class="text-danger">{{info.money}}</span></p>
+                    <p style="margin: 0">{{info.status}}</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <span class="text-danger">预计收益：{{info.profit}}</span>
+                </div>
+            </a>
+            <p ng-show="data.length == 0">暂无案件</p>
+        </div>
+    </div>
+</div>

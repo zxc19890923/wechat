@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <title>帮瀛服务号</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="lib/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.css">
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/demos.css">
+</head>
+
+<body ontouchstart ng-controller="myCtrl">
+<!-- body 顶部加上如下代码 -->
+<div class="weui-pull-to-refresh-layer" style="display: none;">
+    <div class="down">下拉刷新</div><!-- 下拉过程显示的文案 -->
+</div>
+ <!--其他内容-->
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="weui-row">
+    <div class="weui-col-10"></div>
+    <div class="weui-col-80 thumbnail" style="border: none; padding: 0; margin: 20px 0 0 0; background: none;">
+            <img src="images/successMsg.png" style="position: relative"/>
+            <p style="font-size: 18px; position: relative; top: -195px; text-align: center; color: #1689bb; font-weight: bold;" class="text-warning">案件编号: {{num}}</p>
+    </div>
+    <div class="weui-col-10"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-xs-4 col-xs-offset-4">
+        <a href="my.html#/speed/{{project_id}}" class="btn btn-primary btn-block">确定</a>
+    </div>
+</div>
+<script src="lib/jquery-2.1.4.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/function.js"></script>
+<script src="js/angular-1.4.8.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script src="js/wx.js"></script>
+<script>
+    //分享配置
+    $(function () {
+        $.showLoading('加载中');
+        wxShareConfig(function () {
+            $.hideLoading();
+        });
+        $(window).scroll(function () {
+            if ($(document).scrollTop() <= 0) {
+                $(".weui-pull-to-refresh-layer").show();
+                window.location.reload();
+            }
+
+        })
+    });
+    
+    var app = angular.module('app', []);
+    app.controller("myCtrl", function ($scope, $http) {
+        // 获取传递过来的项目id
+        $scope.project_id = sessionStorage.getItem("project_id");
+        $scope.num = sessionStorage.getItem("num");
+    });
+    // 下拉刷新
+    $(document.body).pullToRefresh();
+    $(document.body).on("pull-to-refresh", function() {
+        window.location.reload();
+    });
+    $(document.body).pullToRefreshDone();
+</script>
+</body>
+</html>
